@@ -1,0 +1,26 @@
+test-case-a:
+  why-can-be-abused: A string could get passed into the Marshall function containing spaces and come out as a concatenated string. This leads to the data not being able to be unmarshaled. For example if the value was a set of different passwords of varying length, if the whitespace is removed, then when you unmarshal the string, you won't be able to determine where one ends and another begins
+  root-cause: Misinterpretation 
+  root-cause-rationale: If the programmer removes all whitespace, not just those outside of the string
+
+test-case-b:
+  why-can-be-abused: Depending on how the unmarshal is implemented, if a comma within a string gets passed as an input, the program could interpret the string as a key-value pair instead of just being a value. This would mess up the pairs within the map by possibly misaligning the key value pairs, or being able to input another pair that should no be there.  
+
+  root-cause: Not validating inputs and flawed implementation
+
+  root-cause-rationale: the unmarshal function uses commas to separate key value pairs and does not check to make sure strings only contain the correct characters
+
+test-case-c:
+  why-can-be-abused: If a string beginning with 'i' is able to be interpreted as an integer, it can bypass all of the character checks within the simple and complex strings. An attacker could inject either reserved or unsupported characters into the system or harmful inputs that would other wise be rejected within the string
+  root-cause:Failure to validate input
+  root-cause-rationale: Programmer assumes that if a the value begins with 'i' then it is automatically an integer
+
+test-case-d:
+  why-can-be-abused: If a string is inputted that contains a % but is not followed by the correct values then you could possibly inject characters that are not allowed into the deserialization outputted string or reserved characters. 
+  root-cause: Not validating input 
+  root-cause-rationale:Overlooking that you need to make sure the percent encoded bytes of a complex string are correct values, not just that a complex string contains a percent sign
+
+test-case-e:
+  why-can-be-abused: If you have a nested map that contains empty strings, when it gets serialized, if an empty string exists, it will disappear in the outputted string. This means that when it is time to deserialize it, the key/value pairs will be misaligned and you can lose out on information or not be able to correctly interrupt it an corrupt the readability and information that was suppose to get transferred
+  root-cause: Failure to validate input within nested maps
+  root-cause-rationale: Overlooking continuous validation once an input is accepted into 
