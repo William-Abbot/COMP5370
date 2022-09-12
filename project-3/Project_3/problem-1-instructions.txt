@@ -1,0 +1,3 @@
+REQUIRED MODULES: dpkt
+
+HOW TO RUN: "python3 problem1.py "path to pcap file""
